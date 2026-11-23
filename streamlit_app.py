@@ -32,57 +32,75 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for styling
+# Custom CSS for styling (Simplified, sleek, smaller metrics)
 st.markdown("""
 <style>
     .main-header {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
         font-weight: 800;
         background: linear-gradient(135deg, #059669, #0d9488);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.1rem;
+    }
+    [data-testid="stMetricValue"] {
+        font-size: 1.35rem !important;
+        font-weight: 700 !important;
+    }
+    [data-testid="stMetricLabel"] {
+        font-size: 0.82rem !important;
+        color: #475569 !important;
+        font-weight: 600 !important;
+    }
+    [data-testid="stMetricDelta"] {
+        font-size: 0.74rem !important;
+    }
+    div[data-testid="stMetric"] {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 8px 12px;
+        border-radius: 8px;
     }
     .badge-protein {
         background-color: #e0e7ff;
         color: #3730a3;
         font-weight: 700;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.72rem;
     }
     .badge-carb {
         background-color: #fef3c7;
         color: #92400e;
         font-weight: 700;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.72rem;
     }
     .badge-fiber {
         background-color: #d1fae5;
         color: #065f46;
         font-weight: 700;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.72rem;
     }
     .badge-fat {
         background-color: #ffe4e6;
         color: #9f1239;
         font-weight: 700;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.72rem;
     }
     .badge-budget {
         background-color: #dcfce7;
         color: #15803d;
         border: 1px solid #86efac;
-        font-weight: 800;
-        padding: 2px 7px;
-        border-radius: 6px;
-        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-size: 0.70rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -104,14 +122,15 @@ init_session_state()
 
 # ----------------- SIDEBAR: INPUT CONTROLS -----------------
 with st.sidebar:
-    st.image("https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=300&q=80", use_container_width=True)
-    st.markdown("### ⚙️ User Profile & Parameters")
+    st.markdown("### 🥗 NutriPlan Pro")
+    st.caption("Custom Diet & Macro Calculator")
+    st.markdown("---")
     
     user_name = st.text_input("Full Name", value="Alex Johnson")
     
     col_h1, col_h2 = st.columns([2, 1])
     with col_h1:
-        height_cm = st.number_input("Height (cm)", min_value=90.0, max_value=250.0, value=175.0, step=0.5)
+        height_cm = st.number_input("Height (cm)", min_value=90, max_value=250, value=175, step=1)
     with col_h2:
         total_in = height_cm / 2.54
         ft = int(total_in // 12)
@@ -120,9 +139,9 @@ with st.sidebar:
 
     weight_unit = st.radio("Weight Unit", options=["kg", "lbs"], horizontal=True)
     if weight_unit == "kg":
-        weight_val = st.number_input("Weight (kg)", min_value=30.0, max_value=300.0, value=78.0, step=0.5)
+        weight_val = st.number_input("Weight (kg)", min_value=30, max_value=300, value=78, step=1)
     else:
-        weight_val = st.number_input("Weight (lbs)", min_value=66.0, max_value=660.0, value=172.0, step=1.0)
+        weight_val = st.number_input("Weight (lbs)", min_value=66, max_value=660, value=172, step=1)
 
     workout_opt = st.selectbox("Do you workout / exercise?", options=["Yes", "No"], index=0)
     
@@ -209,9 +228,10 @@ macros = profile["macros"]
 
 st.markdown("---")
 
-col1, col2, col3, col4, col5, col6 = st.columns(6)
+# Row 1: Target Calories, High Protein, Complex Carbs
+row1_col1, row1_col2, row1_col3 = st.columns(3)
 
-with col1:
+with row1_col1:
     st.metric(
         label="🎯 Target Calories",
         value=f"{energy['target_calories']} kcal",
@@ -219,35 +239,40 @@ with col1:
         delta_color="inverse"
     )
 
-with col2:
+with row1_col2:
     st.metric(
         label="🥩 High Protein",
         value=f"{macros['protein_g']} g",
         delta=f"{macros['protein_pct']}% of cals"
     )
 
-with col3:
+with row1_col3:
     st.metric(
         label="🌾 Complex Carbs",
         value=f"{macros['carbs_g']} g",
         delta=f"{macros['carbs_pct']}% of cals"
     )
 
-with col4:
+st.markdown("<div style='margin-top: 6px;'></div>", unsafe_allow_html=True)
+
+# Row 2: Fiber Goal, Healthy Fats, Daily Water
+row2_col1, row2_col2, row2_col3 = st.columns(3)
+
+with row2_col1:
     st.metric(
         label="🌱 Fiber Goal",
         value=f"{macros['fiber_g']} g",
-        delta="30g+ Daily"
+        delta="30g+ Daily Target"
     )
 
-with col5:
+with row2_col2:
     st.metric(
         label="🥑 Healthy Fats",
         value=f"{macros['fat_g']} g",
         delta=f"{macros['fat_pct']}% of cals"
     )
 
-with col6:
+with row2_col3:
     st.metric(
         label="💧 Daily Water",
         value=f"{macros['water_liters']} L",
