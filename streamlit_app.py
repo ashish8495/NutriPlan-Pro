@@ -217,112 +217,206 @@ if generate_btn or (not st.session_state.plan_generated):
 profile = st.session_state.user_profile
 weekly_plan = st.session_state.weekly_plan
 
-st.markdown('<div class="main-header">NutriPlan Pro</div>', unsafe_allow_html=True)
-st.caption("Evidence-Based Scientific Diet Engineering • High Protein • Low Calorie • Fiber Dense • Pocket Friendly")
+# Top Header Banner
+st.markdown("""
+<div style="display: flex; align-items: center; justify-content: flex-start; padding-bottom: 14px; border-bottom: 1px solid rgba(226, 232, 240, 0.8); margin-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #059669, #0d9488); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);">
+            🥗
+        </div>
+        <div>
+            <h1 style="margin: 0; font-size: 24px; font-weight: 800; color: #0f172a; line-height: 1.2;">
+                NutriPlan <span style="color: #059669;">Pro</span>
+            </h1>
+            <p style="margin: 0; font-size: 13px; color: #64748b; font-weight: 500;">
+                High Protein &bull; Low Calorie &bull; Fiber Rich &bull; Pocket Friendly
+            </p>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
-# 1. Summary Cards
+# 1. Summary Cards (Explicit styled cards with high contrast & crisp layout)
 user = profile["user"]
 bmi = profile["bmi"]
 energy = profile["energy"]
 macros = profile["macros"]
 
-st.markdown("---")
-
 # Row 1: Target Calories, High Protein, Complex Carbs
 row1_col1, row1_col2, row1_col3 = st.columns(3)
 
 with row1_col1:
-    st.metric(
-        label="🎯 Target Calories",
-        value=f"{energy['target_calories']} kcal",
-        delta=f"-{energy['deficit_calories']} kcal ({energy['deficit_percentage']}% Deficit)",
-        delta_color="inverse"
-    )
+    st.markdown(f"""
+    <div style="background: linear-gradient(135deg, #059669, #0d9488); color: white; border-radius: 14px; padding: 18px; box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2); height: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #d1fae5;">
+            <span>Target Calories</span>
+            <span style="font-size: 14px;">🔥</span>
+        </div>
+        <div style="font-size: 1.7rem; font-weight: 800; color: #ffffff; margin: 6px 0 2px 0;">
+            {energy['target_calories']} <span style="font-size: 0.9rem; font-weight: 600; opacity: 0.9;">kcal</span>
+        </div>
+        <div style="font-size: 11.5px; color: #d1fae5; font-weight: 600;">
+            <span style="background: rgba(255,255,255,0.22); padding: 2px 6px; border-radius: 4px;">-{energy['deficit_calories']} kcal</span> ({energy['deficit_percentage']}% Deficit from TDEE)
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with row1_col2:
-    st.metric(
-        label="🥩 High Protein",
-        value=f"{macros['protein_g']} g",
-        delta=f"{macros['protein_pct']}% of cals"
-    )
+    st.markdown(f"""
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); height: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #4338ca;">
+            <span>High Protein</span>
+            <span style="background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">🥩 {macros['protein_pct']}%</span>
+        </div>
+        <div style="font-size: 1.7rem; font-weight: 800; color: #0f172a; margin: 6px 0 2px 0;">
+            {macros['protein_g']} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">g</span>
+        </div>
+        <div style="font-size: 11.5px; color: #64748b; font-weight: 500;">
+            Muscle Retention Target (~2.0g/kg)
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with row1_col3:
-    st.metric(
-        label="🌾 Complex Carbs",
-        value=f"{macros['carbs_g']} g",
-        delta=f"{macros['carbs_pct']}% of cals"
-    )
+    st.markdown(f"""
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); height: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #b45309;">
+            <span>Complex Carbs</span>
+            <span style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">🌾 {macros['carbs_pct']}%</span>
+        </div>
+        <div style="font-size: 1.7rem; font-weight: 800; color: #0f172a; margin: 6px 0 2px 0;">
+            {macros['carbs_g']} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">g</span>
+        </div>
+        <div style="font-size: 11.5px; color: #64748b; font-weight: 500;">
+            Sustained Energy & Glycogen Fuel
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.markdown("<div style='margin-top: 6px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
 # Row 2: Fiber Goal, Healthy Fats, Daily Water
 row2_col1, row2_col2, row2_col3 = st.columns(3)
 
 with row2_col1:
-    st.metric(
-        label="🌱 Fiber Goal",
-        value=f"{macros['fiber_g']} g",
-        delta="30g+ Daily Target"
-    )
+    st.markdown(f"""
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); height: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #047857;">
+            <span>Fiber Goal</span>
+            <span style="background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">🌱 Daily</span>
+        </div>
+        <div style="font-size: 1.7rem; font-weight: 800; color: #0f172a; margin: 6px 0 2px 0;">
+            {macros['fiber_g']} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">g</span>
+        </div>
+        <div style="font-size: 11.5px; color: #059669; font-weight: 600;">
+            High Satiety & Gut Microbiome Health
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with row2_col2:
-    st.metric(
-        label="🥑 Healthy Fats",
-        value=f"{macros['fat_g']} g",
-        delta=f"{macros['fat_pct']}% of cals"
-    )
+    st.markdown(f"""
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); height: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #be123c;">
+            <span>Healthy Fats</span>
+            <span style="background: #ffe4e6; color: #9f1239; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">🥑 {macros['fat_pct']}%</span>
+        </div>
+        <div style="font-size: 1.7rem; font-weight: 800; color: #0f172a; margin: 6px 0 2px 0;">
+            {macros['fat_g']} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">g</span>
+        </div>
+        <div style="font-size: 11.5px; color: #64748b; font-weight: 500;">
+            Hormonal Support & Essential Lipids
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with row2_col3:
-    st.metric(
-        label="💧 Daily Water",
-        value=f"{macros['water_liters']} L",
-        delta=f"BMI: {bmi['bmi']} ({bmi['category']})"
-    )
+    st.markdown(f"""
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); height: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #0e7490;">
+            <span>Daily Water & BMI</span>
+            <span style="background: #cffafe; color: #155e75; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">💧 Water</span>
+        </div>
+        <div style="font-size: 1.7rem; font-weight: 800; color: #0f172a; margin: 6px 0 2px 0;">
+            {macros['water_liters']} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">L</span>
+        </div>
+        <div style="font-size: 11.5px; color: #0e7490; font-weight: 600;">
+            BMI: {bmi['bmi']} ({bmi['category']})
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-# 2. Charts Row
-col_c1, col_c2 = st.columns([1, 1])
+st.markdown("<div style='margin-top: 18px;'></div>", unsafe_allow_html=True)
+
+# 2. Charts & Insights Row (3-Column Layout from Open_NutriPlan_App.html)
+col_c1, col_c2, col_c3 = st.columns([1, 1, 1.1])
 
 with col_c1:
-    st.markdown("##### 🥧 Macronutrient Energy Ratio")
-    macro_df = pd.DataFrame({
-        "Nutrient": ["Protein", "Carbohydrates", "Healthy Fats"],
-        "Grams": [macros["protein_g"], macros["carbs_g"], macros["fat_g"]],
-        "Calories": [macros["protein_g"] * 4, macros["carbs_g"] * 4, macros["fat_g"] * 9]
-    })
-    fig_donut = px.pie(
-        macro_df,
-        names="Nutrient",
-        values="Calories",
-        hole=0.55,
-        color="Nutrient",
-        color_discrete_map={
-            "Protein": "#4f46e5",
-            "Carbohydrates": "#f59e0b",
-            "Healthy Fats": "#f43f5e"
-        }
-    )
-    fig_donut.update_traces(textposition='inside', textinfo='percent+label')
-    fig_donut.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=230, showlegend=False)
-    st.plotly_chart(fig_donut, use_container_width=True)
+    with st.container(border=True):
+        st.markdown("<div style='font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px;'>🥧 Macronutrient Energy Ratio</div>", unsafe_allow_html=True)
+        macro_df = pd.DataFrame({
+            "Nutrient": ["Protein", "Carbs", "Fats"],
+            "Grams": [macros["protein_g"], macros["carbs_g"], macros["fat_g"]],
+            "Calories": [macros["protein_g"] * 4, macros["carbs_g"] * 4, macros["fat_g"] * 9]
+        })
+        fig_donut = px.pie(
+            macro_df,
+            names="Nutrient",
+            values="Calories",
+            hole=0.55,
+            color="Nutrient",
+            color_discrete_map={
+                "Protein": "#4f46e5",
+                "Carbs": "#f59e0b",
+                "Fats": "#f43f5e"
+            }
+        )
+        fig_donut.update_traces(textposition='inside', textinfo='percent+label', marker=dict(line=dict(color='#ffffff', width=2)))
+        fig_donut.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=190, showlegend=False)
+        st.plotly_chart(fig_donut, use_container_width=True)
 
 with col_c2:
-    st.markdown("##### ⚡ Metabolic Energy Breakdown (kcal)")
-    fig_bar = go.Figure(data=[
-        go.Bar(
-            x=["BMR (Resting)", "TDEE (Maintenance)", "Target (Deficit)"],
-            y=[energy["bmr"], energy["tdee"], energy["target_calories"]],
-            marker_color=["#94a3b8", "#0ea5e9", "#10b981"],
-            text=[f"{energy['bmr']} kcal", f"{energy['tdee']} kcal", f"{energy['target_calories']} kcal"],
-            textposition='auto',
+    with st.container(border=True):
+        st.markdown("<div style='font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px;'>⚡ Metabolic Energy Balance (kcal)</div>", unsafe_allow_html=True)
+        fig_bar = go.Figure(data=[
+            go.Bar(
+                x=["BMR", "TDEE", "Target"],
+                y=[energy["bmr"], energy["tdee"], energy["target_calories"]],
+                marker_color=["#94a3b8", "#0ea5e9", "#10b981"],
+                text=[f"{energy['bmr']}", f"{energy['tdee']}", f"{energy['target_calories']}"],
+                textposition='auto',
+            )
+        ])
+        fig_bar.update_layout(
+            margin=dict(t=10, b=10, l=10, r=10),
+            height=190,
+            yaxis=dict(title=None, showgrid=True),
+            xaxis=dict(showgrid=False)
         )
-    ])
-    fig_bar.update_layout(
-        margin=dict(t=10, b=10, l=10, r=10),
-        height=230,
-        yaxis=dict(title="Calories (kcal)", showgrid=True),
-        xaxis=dict(showgrid=False)
-    )
-    st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, use_container_width=True)
+
+with col_c3:
+    st.markdown(f"""
+    <div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border-radius: 12px; padding: 16px; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div style="font-size: 11px; font-weight: 700; color: #34d399; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
+                💡 Clinical Nutrition Notes
+            </div>
+            <div style="font-size: 13px; font-weight: 700; color: #f8fafc; margin-bottom: 8px;">
+                Optimized for Fat Loss & Muscle Retention
+            </div>
+            <div style="font-size: 11.5px; color: #cbd5e1; line-height: 1.5; margin-bottom: 4px;">
+                • <b>High Protein:</b> Preserves lean mass in caloric deficit.<br>
+                • <b>Fiber (30g+):</b> Extends satiety and stabilizes blood sugar.<br>
+                • <b>Safe Deficit:</b> ~22% sustainable reduction without metabolic slowdown.
+            </div>
+        </div>
+        <div style="background: rgba(30, 41, 59, 0.9); border: 1px solid #334155; border-radius: 8px; padding: 8px 12px; font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between; margin-top: 8px;">
+            <span>BMI Status: <b style="color: #34d399;">{bmi['category']}</b></span>
+            <span>Target: <b>{energy['target_calories']} kcal</b></span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.markdown("---")
 
