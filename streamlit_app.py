@@ -394,28 +394,30 @@ for day_name in DAYS_OF_WEEK:
                     # Meal Swap Dropdown Selector (Allows picking ANY meal from full catalog)
                     cat_key = "snack" if "snack" in meal["meal_type"].lower() else meal["meal_type"].lower()
                     all_candidates = filter_meals_by_diet(cat_key, user["diet_pref"].lower(), "any")
+                    cand_map = {m["id"]: m for m in all_candidates}
                     
+                    # Ensure current meal is represented even if filters shifted
+                    if meal["id"] not in cand_map:
+                        cand_map[meal["id"]] = meal
+                        all_candidates = [meal] + all_candidates
+
+                    cand_ids = [m["id"] for m in all_candidates]
+                    curr_idx = cand_ids.index(meal["id"]) if meal["id"] in cand_ids else 0
+
                     with st.expander("🔄 Choose / Swap Meal", expanded=False):
-                        option_labels = [
-                            f"{'(💲 Pocket-Friendly) ' if m.get('is_budget') else ''}{m['name']} (~{m['calories']} kcal, {m['protein']}g P)"
-                            for m in all_candidates
-                        ]
-                        curr_pick_idx = 0
-                        for c_i, c_m in enumerate(all_candidates):
-                            if c_m["id"] == meal["id"]:
-                                curr_pick_idx = c_i
-                                break
-                        
-                        selected_option = st.selectbox(
+                        selected_meal_id = st.selectbox(
                             f"Select alternative {meal['meal_type']}:",
-                            options=range(len(all_candidates)),
-                            format_func=lambda i: option_labels[i],
-                            index=curr_pick_idx,
-                            key=f"select_{day_name}_{idx}"
+                            options=cand_ids,
+                            format_func=lambda mid: (
+                                f"{'(💲 Pocket-Friendly) ' if cand_map[mid].get('is_budget') else ''}"
+                                f"{cand_map[mid]['name']} (~{cand_map[mid]['calories']} kcal, {cand_map[mid]['protein']}g P)"
+                            ),
+                            index=curr_idx,
+                            key=f"select_{day_name}_{idx}_{meal['id']}"
                         )
                         
-                        if selected_option != curr_pick_idx:
-                            picked_meal = all_candidates[selected_option]
+                        if selected_meal_id != meal["id"] and selected_meal_id in cand_map:
+                            picked_meal = cand_map[selected_meal_id]
                             apply_chosen_meal(day_name, idx, picked_meal, meal["calories"])
                             st.rerun()
 
