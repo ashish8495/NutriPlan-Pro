@@ -219,16 +219,16 @@ weekly_plan = st.session_state.weekly_plan
 
 # Top Header Banner
 st.markdown("""
-<div style="display: flex; align-items: center; justify-content: flex-start; padding-bottom: 14px; border-bottom: 1px solid rgba(226, 232, 240, 0.8); margin-bottom: 20px;">
+<div style="display: flex; align-items: center; justify-content: flex-start; padding-bottom: 14px; border-bottom: 1px solid rgba(226, 232, 240, 0.2); margin-bottom: 20px;">
     <div style="display: flex; align-items: center; gap: 14px;">
         <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #059669, #0d9488); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);">
             🥗
         </div>
         <div>
-            <h1 style="margin: 0; font-size: 24px; font-weight: 800; color: #0f172a; line-height: 1.2;">
-                NutriPlan <span style="color: #059669;">Pro</span>
+            <h1 style="margin: 0; font-size: 26px; font-weight: 800; color: #10b981; line-height: 1.2; letter-spacing: -0.02em;">
+                NutriPlan Pro
             </h1>
-            <p style="margin: 0; font-size: 13px; color: #64748b; font-weight: 500;">
+            <p style="margin: 0; font-size: 13px; color: #94a3b8; font-weight: 500;">
                 High Protein &bull; Low Calorie &bull; Fiber Rich &bull; Pocket Friendly
             </p>
         </div>
